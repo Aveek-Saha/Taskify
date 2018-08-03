@@ -1,0 +1,93 @@
+<div class="row">
+
+  <div class="col-lg-3">
+    <button type="button" class="btn success-color waves-light" mdbBtn 
+    color="success" rounded="true" outline="true" data-toggle="modal" data-target="#basicExample"
+      (click)="frame.show()" mdbWavesEffect>Add Chat</button>
+
+  </div>
+
+
+  <div mdbModal #frame="mdbModal" class="modal fade left" id="frameModalTop" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header text-center">
+          <h4 class="modal-title w-100 font-weight-bold black-text">New Chat</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="frame.hide()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body mx-3">
+
+          <div class="md-form mb-4">
+            <i class="fa fa-pencil prefix grey-text"></i>
+            <input type="text" id="defaultForm-pass" [formControl]=newTask #text class="form-control validate" (keyup.enter)="addChat(text.value)"
+              (keyup.enter)="frame.hide()" mdbInputDirective>
+            <label data-error="wrong" data-success="right" for="defaultForm-pass">Enter the other users Email</label>
+          </div>
+
+        </div>
+        <div class="modal-footer d-flex justify-content-center">
+          <button mdbBtn color="default" class="btn btn-primary waves-light" type="submit" mdbWavesEffect (click)="addChat(text.value)"
+            (click)="frame.hide()">Add</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-6">
+    <div class="card lighten-2 z-depth-2 taskCard" *ngFor="let ch of chatList; let i = index">
+      <a style="display: inline; align-content: right">
+        <div *ngIf="afAuth.user | async as user;" (click)="message(ch.id)">
+          <div class="card-body text">
+            <h5 class="white-text h5-responsive" style="display: inline" *ngFor="let person of ch.participants;">
+              <span class="badge badge-custom">{{person.displayName}}</span>&nbsp;
+            </h5>
+            <i class="fa fa-arrow-right" aria-hidden="true" style="float: right"></i>
+            <i class="fa fa-comment-o" aria-hidden="true" style="float: right; margin-right: 4px"></i>
+          </div>
+
+        </div>
+      </a>
+
+      <hr>
+
+      <a>
+        <button type="button" style="display: inline-block" (click)="frameAdd.show()"
+         class="btn btn-outline-success btn-sm btn-add">
+          <i class="fa fa-plus fa-1x" aria-hidden="true"></i>
+        Add People          
+        </button>
+      </a>
+
+      <div mdbModal #frameAdd="mdbModal" class="modal fade left" id="frameModalTop" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header text-center">
+              <h4 class="modal-title w-100 font-weight-bold black-text">Add User To Chat</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="frameAdd.hide()">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body mx-3">
+
+              <div class="md-form mb-4">
+                <i class="fa fa-pencil prefix grey-text"></i>
+                <input type="text" id="defaultForm-pass" [formControl]=newTask #text class="form-control validate" (keyup.enter)="addPerson(text.value, ch.id)"
+                  (keyup.enter)="frameAdd.hide()" mdbInputDirective>
+                <label data-error="wrong" data-success="right" for="defaultForm-pass">Enter Email</label>
+              </div>
+
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+              <button mdbBtn color="default" class="btn btn-primary waves-light" type="submit" mdbWavesEffect (click)="addPerson(text.value, ch.id)"
+                (click)="frameAdd.hide()">Add</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>

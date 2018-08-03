@@ -1,0 +1,95 @@
+<div class="row">
+
+  <div class="col-lg-2"></div>
+
+  <div class="col">
+    <!--Card Default-->
+    <div class="card lighten-2 z-depth-2 taskCard" *ngFor="let tas of messages; let i = index">
+      <div class="card-body text" (swiperight)="frameEdit.show()" (dblclick)="frameEdit.show()">
+        <h5 class="white-text h5-responsive">{{tas.content}}
+          <button mdbBtn type="button" size="sm" style="float: right;" class="btn waves-light btn-del btn-sm" (click)='remove(tas.id)'
+            mdbWavesEffect>Done</button>
+        </h5>
+        <!-- <br> -->
+        <p class="sender">{{tas.sender}}</p>
+        <!-- <hr class="my-2"> -->
+
+      </div>
+
+      <div mdbModal #frameEdit="mdbModal" class="modal fade left" id="frameModalTop" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header text-center">
+              <h4 class="modal-title w-100 font-weight-bold black-text">Edit Task</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="frameEdit.hide()">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body mx-3">
+
+              <div class="md-form mb-4">
+                <i class="fa fa-pencil prefix grey-text"></i>
+                <input type="text" id="defaultForm-pass" [formControl]=newTask value="{{tas.content}}" #textNew class="form-control validate"
+                  (keyup.enter)="edit(tas.id, textNew.value, tas.time)" (keyup.enter)="frameEdit.hide()" mdbInputDirective>
+                <label data-error="wrong" data-success="right" for="defaultForm-pass">Description</label>
+              </div>
+
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+              <button mdbBtn color="default" class="btn btn-primary waves-light" type="submit" mdbWavesEffect (click)="frameEdit.hide()"
+                (click)="edit(tas.id, textNew.value, tas.time)">
+                Save Changes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <!--/.Card Default-->
+
+
+  </div>
+
+
+  <div class="col-lg-3">
+    <button type="button" class="btn btn-outline-success waves-light" mdbBtn color="success" 
+     outline="true" rounded="true" data-toggle="modal" data-target="#basicExample"
+      (click)="frame.show()" mdbWavesEffect>Add task</button>
+
+    <div mdbModal #frame="mdbModal" class="modal fade left" id="frameModalTop" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header text-center">
+            <h4 class="modal-title w-100 font-weight-bold black-text">New Task</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="frame.hide()">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body mx-3">
+            <!-- <div class="md-form mb-5">
+              <i class="fa fa-envelope prefix grey-text"></i>
+              <input type="email" id="defaultForm-email" [formControl]="loginFormModalEmail" class="form-control validate" mdbInputDirective>
+              <label data-error="wrong" data-success="right" for="defaultForm-email">Your email</label>
+            </div> -->
+
+            <div class="md-form mb-4">
+              <i class="fa fa-pencil prefix grey-text"></i>
+              <input type="text" id="defaultForm-pass" [formControl]=newTask #text class="form-control validate" (keyup.enter)="addTask(text.value)"
+                (keyup.enter)="frame.hide()" mdbInputDirective>
+              <label data-error="wrong" data-success="right" for="defaultForm-pass">Description</label>
+            </div>
+
+          </div>
+          <div class="modal-footer d-flex justify-content-center">
+            <button mdbBtn color="default" class="btn btn-primary waves-light" type="submit" mdbWavesEffect (click)="addTask(text.value)"
+              (click)="frame.hide()">Add</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div>
