@@ -19,9 +19,15 @@ export class AppComponent {
   constructor(public afAuth: AngularFireAuth,
     public afs: AngularFirestore, public use: UserService, public router: Router) {
   }
+
+  loginFb() {
+    this.use.loginFb();
+  }
+
   login() {
     this.use.login();
   }
+  
   logout() {
     this.use.logout();
   }

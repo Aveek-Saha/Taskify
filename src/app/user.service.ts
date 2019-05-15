@@ -24,14 +24,38 @@ interface User {
 })
 export class UserService {
 
-  constructor(public afAuth: AngularFireAuth,
-    public afs: AngularFirestore) {
+  constructor(public afAuth: AngularFireAuth, public afs: AngularFirestore) {
+    
   }
+
+
+
   public login() {
-    this.afAuth.auth.signInWithPopup(new auth.GoogleAuthProvider()).then((credential) => {
+    // this.afAuth.auth.signInWithPopup(new auth.GoogleAuthProvider()).then((credential) => {
+    //   this.updateUserData(credential.user)
+    // });
+    this.afAuth.auth.signInWithRedirect(new auth.GoogleAuthProvider())
+    this.afAuth.auth.getRedirectResult().then(function (credential) {
       this.updateUserData(credential.user)
-    });
+    }, function (error) {
+      console.log(error)
+    })
   }
+
+
+  public loginFb() {
+    // this.afAuth.auth.signInWithPopup(new auth.FacebookAuthProvider()).then((credential) => {
+    //   this.updateUserData(credential.user)
+    // });
+    this.afAuth.auth.signInWithRedirect(new auth.FacebookAuthProvider())
+    this.afAuth.auth.getRedirectResult().then(function (credential) {
+      this.updateUserData(credential.user)
+    }, function (error) {
+      console.log(error)
+    })
+  }
+
+  
   public logout() {
     this.afAuth.auth.signOut();
   }
