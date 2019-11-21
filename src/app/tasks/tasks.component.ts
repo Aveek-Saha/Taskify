@@ -11,12 +11,18 @@ import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { WavesModule } from 'angular-bootstrap-md'
 import { UserService } from "../user.service";
 
+import axios from "axios";
+
 interface User {
   uid: string;
   email: string;
   photoURL?: string;
   displayName?: string;
   favoriteColor?: string;
+}
+
+interface Time {
+  time: number;
 }
 
 interface Task {
@@ -33,6 +39,7 @@ export class TasksComponent implements OnInit {
 
   newTask = new FormControl('', Validators.required);
   todo: any[];
+  estimate: string;
 
   constructor(public afAuth: AngularFireAuth,
     public afs: AngularFirestore, public use: UserService, public router: Router) {
@@ -60,7 +67,36 @@ export class TasksComponent implements OnInit {
         //   console.log(doc);
         // });
       });
+      this.estimate = "Check"
 
+  }
+
+  public getTimes() {
+    let user = this.afAuth.auth.currentUser;
+    let userDoc = this.afs.firestore.collection(`users/${user.uid}/time`);
+
+    userDoc.get().then((querySnapshot) => {
+      var times = []
+      querySnapshot.forEach((doc) => {
+        console.log(doc.data().time);
+        times.push(doc.data().time)
+      })
+      axios.post('http://localhost:5001', {
+        times: times,
+      })
+      .then((response) => {
+        console.log(response);
+        // this.estimate 
+        var diffMs = response.data
+
+        var diffDays = Math.floor(diffMs / 86400000); // days
+        var diffHrs = Math.floor((diffMs % 86400000) / 3600000); // hours
+        var diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); // minutes
+        this.estimate = diffDays + " days, " + diffHrs + " hours, " + diffMins + " minutes"
+      }, (error) => {
+        console.log(error);
+      });
+    })
   }
 
   public addTask(text: string) {
@@ -79,11 +115,26 @@ export class TasksComponent implements OnInit {
     }
   }
 
-  public remove(id: string) {
+  public remove(id: string, time: number) {
     // console.log(id);
 
     let user = this.afAuth.auth.currentUser;
     var taskDoc = this.afs.doc<Task>(`users/${user.uid}/todo/${id}`);
+
+    const timeRef: AngularFirestoreCollection<any> = this.afs.collection(`users/${user.uid}/time`);
+
+    console.log(time);
+    console.log(Date.now() - time);
+    
+    var newTime = Date.now() - time
+
+    const data: Time = {
+      time: newTime,
+    }
+
+    timeRef.add(data);
+
+    
     //Delete the document
     taskDoc.delete();
   }

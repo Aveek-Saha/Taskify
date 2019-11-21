@@ -7,7 +7,7 @@
     <div class="card lighten-2 z-depth-2 taskCard" *ngFor="let tas of todo; let i = index">
       <div class="card-body text" (swiperight)="frameEdit.show()" (dblclick)="frameEdit.show()">
         <h5 class="white-text h5-responsive">{{tas.task}}
-          <button mdbBtn type="button" size="sm" style="float: right;" class="btn waves-light btn-del btn-sm" (click)='remove(tas.id)'
+          <button mdbBtn type="button" size="sm" style="float: right;" class="btn waves-light btn-del btn-sm" (click)='remove(tas.id, tas.time)'
             mdbWavesEffect>Done</button>
         </h5>
 
@@ -52,6 +52,15 @@
   <div class="col-lg-3">
     <button type="button" class="btn btn-outline-success success-color waves-light" mdbBtn color="success" rounded="true" data-toggle="modal" data-target="#basicExample"
       (click)="frame.show()" mdbWavesEffect>Add task</button>
+
+    <button type="button" class="btn btn-outline-success success-color waves-light" mdbBtn color="success" rounded="true" (click)="getTimes()" mdbWavesEffect>Estimate</button>
+    
+    <div class="card lighten-2 z-depth-2 taskCard">
+      <div class="card-body text">
+        <h5 class="white-text h5-responsive">{{estimate}}</h5>
+    
+      </div>
+    </div>
 
     <div mdbModal #frame="mdbModal" class="modal fade left" id="frameModalTop" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
       aria-hidden="true">
